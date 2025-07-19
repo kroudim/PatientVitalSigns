@@ -1,0 +1,61 @@
+﻿@model IEnumerable<PatientVitalSigns.Application.PatientDto>
+@{
+    ViewData["Title"] = "Patients";
+}
+<h2>Patient List</h2>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<table class="table table-striped table-bordered mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Room Number</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+            {
+            foreach (var patient in Model)
+                {
+                <tr>
+                    <td>@patient.Name</td>
+                    <td>@patient.SurName</td>
+                    <td>@patient.Room</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group" aria-label="Patient Actions">
+                            <a asp-action="Monitor" asp-route-id="@patient.Id" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="Monitor Patient">
+                                <i class="bi bi-activity"></i> Monitor
+                            </a>
+                            <a asp-action="History" asp-route-id="@patient.Id" class="btn btn-info btn-sm ms-1" data-bs-toggle="tooltip" title="View History">
+                                <i class="bi bi-clock-history"></i> History
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                }
+            }
+        else
+            {
+            <tr>
+                <td colspan="4" class="text-center">No patients found.</td>
+            </tr>
+            }
+    </tbody>
+</table>
+<div class="mb-4">
+    <a asp-action="ExportAllVitalsCsv" class="btn btn-success" data-bs-toggle="tooltip" title="View History">
+        <i class="bi bi-file-earmark-arrow-down"></i> Export All Vital Signs (CSV)
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+}

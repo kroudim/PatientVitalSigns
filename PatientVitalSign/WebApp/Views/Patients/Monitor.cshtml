@@ -1,0 +1,164 @@
+﻿@model PatientVitalSignsSolution.WebApp.Models.PatientMonitorViewModel
+@{
+    ViewData["Title"] = $"Monitoring: {Model.Patient?.Name}";
+    var latestVitals = Model.VitalSigns?.OrderByDescending(v => v.TimeStamp).FirstOrDefault();
+
+    // Helper to generate status class in C#
+    string StatusToClass(PatientVitalSigns.Domain.VitalSignStatus status) =>
+        status == PatientVitalSigns.Domain.VitalSignStatus.Critical ? "bg-danger"
+        : status == PatientVitalSigns.Domain.VitalSignStatus.Warning ? "bg-warning text-dark"
+        : "bg-success";
+}
+
+<h2>Monitoring: @Model.Patient?.Name</h2>
+<div>
+    <strong>SurName:</strong> @Model.Patient?.SurName
+    <strong>Room:</strong> @Model.Patient?.Room <br />
+</div>
+<hr />
+
+@if (latestVitals != null)
+    {
+    <div id="alerts">
+        @* Example alert: show if any critical value (customize as needed) *@
+        @if (latestVitals.HeartRateStatus == PatientVitalSigns.Domain.VitalSignStatus.Critical )
+            {
+            <div class="alert alert-danger">
+                Heart Rate is in critical range!
+            </div>
+            }
+        @if (latestVitals.OxygenSaturationStatus == PatientVitalSigns.Domain.VitalSignStatus.Critical  )
+            {
+            <div class="alert alert-danger">
+                Oxygen Saturation is in critical range!
+            </div>
+            }
+        @if (latestVitals.BloodPressureStatus == PatientVitalSigns.Domain.VitalSignStatus.Critical)
+            {
+            <div class="alert alert-danger">
+                Blood Pressure is in critical range!
+            </div>
+            }
+    </div>
+
+    <div id="vitals-container" class="mb-4">
+        <h4>Current Vital Signs</h4>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Heart Rate
+                <span id="heart-rate-badge" class="badge @StatusToClass(latestVitals.HeartRateStatus)">
+                    @latestVitals.HeartRate bpm
+                </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Blood Pressure Diastolic
+                <span id="bp-diastolic-badge" class="badge @StatusToClass(latestVitals.BloodPressureStatus)">
+                    @latestVitals.BloodPressureDiastolic
+                </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Blood Pressure Systolic
+                <span id="bp-systolic-badge" class="badge @StatusToClass(latestVitals.BloodPressureStatus)">
+                    @latestVitals.BloodPressureSystolic
+                </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Oxygen Saturation
+                <span id="oxygen-sat-badge" class="badge @StatusToClass(latestVitals.OxygenSaturationStatus)">
+                    @latestVitals.OxygenSaturation %
+                </span>
+            </li>
+        </ul>
+        <small id="vitals-timestamp" class="text-muted">Last updated: @latestVitals.TimeStamp.ToLocalTime().ToString("g")</small>
+    </div>
+    }
+else
+    {
+    <div class="alert alert-info">No vital signs recorded for this patient yet.</div>
+    }
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const patientId = @Model.Patient?.Id;
+
+        // Helper: status string to bootstrap class
+        function statusToClass(status) {
+            switch (status) {
+                case 'Critical': return 'bg-danger';
+                case 'Warning': return 'bg-warning text-dark';
+                default: return 'bg-success';
+            }
+        }
+   
+        // SignalR for real-time updates
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/vitalsignsHub')
+            .build();
+
+        connection.on('ReceiveVitalSigns', function (pid, vital) {
+
+            console.log("SignalR received", pid, vital, "patientId:", patientId);
+
+            if (pid == patientId) {
+
+                // Update Heart Rate
+                const hrBadge = document.getElementById('heart-rate-badge');
+                hrBadge.textContent = vital.heartRate + ' bpm';
+                hrBadge.className = 'badge ' + statusToClass(vital.heartRateStatus);
+
+                // Update Blood Pressure Diastolic
+                const bpDiaBadge = document.getElementById('bp-diastolic-badge');
+                bpDiaBadge.textContent = vital.bloodPressureDiastolic;
+                bpDiaBadge.className = 'badge ' + statusToClass(vital.bloodPressureStatus);
+
+                // Update Blood Pressure Systolic
+                const bpSysBadge = document.getElementById('bp-systolic-badge');
+                bpSysBadge.textContent = vital.bloodPressureSystolic;
+                bpSysBadge.className = 'badge ' + statusToClass(vital.bloodPressureStatus);
+
+                // Update Oxygen Saturation
+                const oxyBadge = document.getElementById('oxygen-sat-badge');
+                oxyBadge.textContent = vital.oxygenSaturation + ' %';
+                oxyBadge.className = 'badge ' + statusToClass(vital.oxygenSaturationStatus);
+
+                // Update timestamp
+                const ts = document.getElementById('vitals-timestamp');
+                ts.textContent = "Last updated: " + new Date(vital.timestamp).toLocaleString();
+
+                // --- Real-time alert banner update ---
+                const alertsDiv = document.getElementById('alerts');
+                // Clear existing alerts
+                alertsDiv.innerHTML = '';
+                // Heart Rate Alert
+                if (vital.heartRateStatus === 'Critical') {
+                    const hrAlert = document.createElement('div');
+                    hrAlert.className = 'alert alert-danger';
+                    hrAlert.id = "heart-rate-alert";
+                    hrAlert.textContent = "Heart Rate is in critical range!";
+                    alertsDiv.appendChild(hrAlert);
+                }
+                // Oxygen Saturation Alert
+                if (vital.oxygenSaturationStatus === 'Critical') {
+                    const oxAlert = document.createElement('div');
+                    oxAlert.className = 'alert alert-danger';
+                    oxAlert.id = "oxygen-sat-alert";
+                    oxAlert.textContent = "Oxygen Saturation is in critical range!";
+                    alertsDiv.appendChild(oxAlert);
+                }
+                // Blood Pressure Alert
+                if (vital.bloodPressureStatus === 'Critical') {
+                    const bpAlert = document.createElement('div');
+                    bpAlert.className = 'alert alert-danger';
+                    bpAlert.id = "bp-alert";
+                    bpAlert.textContent = "BloodPressure is in critical range!";
+                    alertsDiv.appendChild(bpAlert);
+                 }
+                }            
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
+}

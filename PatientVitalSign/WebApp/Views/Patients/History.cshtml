@@ -1,0 +1,143 @@
+﻿@model PatientVitalSignsSolution.WebApp.Models.PatientMonitorViewModel
+@{
+    ViewData["Title"] = $"History Vital Signs: {Model.Patient?.Name}";
+    var from = DateTime.UtcNow.AddHours(-24);
+    var vitalsForChart = Model.VitalSigns
+            .Where(v => v.TimeStamp >= from)
+            .OrderBy(v => v.TimeStamp)
+            .Select(v => new
+                {
+                timestamp = v.TimeStamp.ToString("o"), // ISO 8601 format
+                heartRate = v.HeartRate,
+                oxygenSaturation = v.OxygenSaturation,
+                bloodPressureSystolic = v.BloodPressureSystolic,
+                bloodPressureDiastolic = v.BloodPressureDiastolic
+                });
+
+    var vitalsJson = System.Text.Json.JsonSerializer.Serialize(vitalsForChart);
+}
+
+<h2>Monitoring: @Model.Patient?.Name</h2>
+<div>
+    <strong>SurName:</strong> @Model.Patient?.SurName
+    <strong>Room:</strong> @Model.Patient?.Room <br />
+</div>
+<hr />
+
+
+<div class="mb-4">
+    <h4>Vital Signs Trends (Last 24 Hours)</h4>
+    <canvas id="vitalsChart" width="800" height="300"></canvas>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const patientId = @Model.Patient?.Id;
+        // Prepare data for the chart
+        const vitals = @Html.Raw(vitalsJson);
+
+        // Extract chart data
+        const timeLabels = vitals.map(v => new Date(v.timestamp).toLocaleTimeString());
+        const heartRates = vitals.map(v => v.heartRate);
+        const oxygenSats = vitals.map(v => v.oxygenSaturation);
+        const bpSystolics = vitals.map(v => v.bloodPressureSystolic);
+        const bpDiastolics = vitals.map(v => v.bloodPressureDiastolic);
+
+        // Chart.js setup
+        const ctx = document.getElementById('vitalsChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [
+                    {
+                        label: 'Heart Rate',
+                        data: heartRates,
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255,0,0,0.1)',
+                        yAxisID: 'y',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Oxygen Saturation',
+                        data: oxygenSats,
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0,0,255,0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'BP Systolic',
+                        data: bpSystolics,
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0,128,0,0.1)',
+                        yAxisID: 'y2',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'BP Diastolic',
+                        data: bpDiastolics,
+                        borderColor: 'orange',
+                        backgroundColor: 'rgba(255,165,0,0.1)',
+                        yAxisID: 'y2',
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Heart Rate (bpm)' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Oxygen Saturation (%)' },
+                        grid: { drawOnChartArea: false }
+                    },
+                    y2: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Blood Pressure (mmHg)' },
+                        grid: { drawOnChartArea: false },
+                        offset: true
+                    }
+                }
+            }
+        });
+
+        // SignalR for real-time updates
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/vitalsignsHub')
+            .build();
+
+        connection.on('ReceiveVitalSigns', function (pid, vital) {
+            if (pid == patientId) {
+                // Update chart
+                const time = new Date(vital.timestamp).toLocaleTimeString();
+                chart.data.labels.push(time);
+                chart.data.datasets[0].data.push(vital.heartRate);
+                chart.data.datasets[1].data.push(vital.oxygenSaturation);
+                chart.data.datasets[2].data.push(vital.bloodPressureSystolic);
+                chart.data.datasets[3].data.push(vital.bloodPressureDiastolic);
+                if (chart.data.labels.length > 100) { 
+                    chart.data.labels.shift();
+                    chart.data.datasets.forEach(ds => ds.data.shift());
+                }
+                chart.update();
+            }
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
+}
