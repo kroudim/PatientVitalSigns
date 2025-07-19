@@ -1,0 +1,80 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientVitalSignsSolution.WebApp", "WebApp\PatientVitalSignsSolution.WebApp.csproj", "{6F8DE6FA-B792-4172-AD4F-CAB60982C2E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B6BF4E5D-77C9-4792-901A-4D27068C0E66}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{BE8BAF3D-3E57-4F03-8F1B-4E6BD469040F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastucture", "Infrastucture", "{5F8211DB-E0F6-463D-89BC-B8391A877C7F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{38E1F5E3-DF1D-45C8-B3A3-FD804AFCA451}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientVitalSigns.Domain", "PatientVitalSigns.Domain\PatientVitalSigns.Domain.csproj", "{26DD96FD-9EB3-4717-8EF6-88C1C3CB5C1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientVitalSigns.Application", "PatientVitalSigns.Application\PatientVitalSigns.Application.csproj", "{17B890D3-8399-430C-BE2D-E94EC09166B1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientVitalSigns.Persistence", "PatientVitalSigns.Persistence\PatientVitalSigns.Persistence.csproj", "{29D26A6D-D696-432B-96E2-84FAB49737C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientVitalSigns.Api", "PatientVitalSigns.api\PatientVitalSigns.Api.csproj", "{610E1CE0-F7B9-4A57-A87C-25F13767FABB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientVitalSigns.Infrastructure", "PatientVitalSigns.Infrastucture\PatientVitalSigns.Infrastructure.csproj", "{3C9A3E67-6E2C-410C-AF2A-7D1181FD44F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1F0A8E72-CE79-4CE2-8869-80B52DAA1F92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientVitalSignsApi.Tests", "PatientVitalSigns.Test\PatientVitalSignsApi.Tests.csproj", "{3C21AE66-D1B0-41A0-885B-FEF99344B255}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F8DE6FA-B792-4172-AD4F-CAB60982C2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F8DE6FA-B792-4172-AD4F-CAB60982C2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F8DE6FA-B792-4172-AD4F-CAB60982C2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F8DE6FA-B792-4172-AD4F-CAB60982C2E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26DD96FD-9EB3-4717-8EF6-88C1C3CB5C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26DD96FD-9EB3-4717-8EF6-88C1C3CB5C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26DD96FD-9EB3-4717-8EF6-88C1C3CB5C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26DD96FD-9EB3-4717-8EF6-88C1C3CB5C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B890D3-8399-430C-BE2D-E94EC09166B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B890D3-8399-430C-BE2D-E94EC09166B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B890D3-8399-430C-BE2D-E94EC09166B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B890D3-8399-430C-BE2D-E94EC09166B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29D26A6D-D696-432B-96E2-84FAB49737C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29D26A6D-D696-432B-96E2-84FAB49737C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29D26A6D-D696-432B-96E2-84FAB49737C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29D26A6D-D696-432B-96E2-84FAB49737C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{610E1CE0-F7B9-4A57-A87C-25F13767FABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{610E1CE0-F7B9-4A57-A87C-25F13767FABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{610E1CE0-F7B9-4A57-A87C-25F13767FABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{610E1CE0-F7B9-4A57-A87C-25F13767FABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9A3E67-6E2C-410C-AF2A-7D1181FD44F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9A3E67-6E2C-410C-AF2A-7D1181FD44F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9A3E67-6E2C-410C-AF2A-7D1181FD44F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9A3E67-6E2C-410C-AF2A-7D1181FD44F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C21AE66-D1B0-41A0-885B-FEF99344B255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C21AE66-D1B0-41A0-885B-FEF99344B255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C21AE66-D1B0-41A0-885B-FEF99344B255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C21AE66-D1B0-41A0-885B-FEF99344B255}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F8DE6FA-B792-4172-AD4F-CAB60982C2E1} = {38E1F5E3-DF1D-45C8-B3A3-FD804AFCA451}
+		{26DD96FD-9EB3-4717-8EF6-88C1C3CB5C1C} = {B6BF4E5D-77C9-4792-901A-4D27068C0E66}
+		{17B890D3-8399-430C-BE2D-E94EC09166B1} = {B6BF4E5D-77C9-4792-901A-4D27068C0E66}
+		{29D26A6D-D696-432B-96E2-84FAB49737C5} = {5F8211DB-E0F6-463D-89BC-B8391A877C7F}
+		{610E1CE0-F7B9-4A57-A87C-25F13767FABB} = {BE8BAF3D-3E57-4F03-8F1B-4E6BD469040F}
+		{3C9A3E67-6E2C-410C-AF2A-7D1181FD44F7} = {5F8211DB-E0F6-463D-89BC-B8391A877C7F}
+		{3C21AE66-D1B0-41A0-885B-FEF99344B255} = {1F0A8E72-CE79-4CE2-8869-80B52DAA1F92}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8DA921DA-9E99-44F1-A09D-2157AD3BDA63}
+	EndGlobalSection
+EndGlobal
