@@ -1,0 +1,6 @@
+@PatientVitalSigns.api_HostAddress = http://localhost:5004
+
+GET {{PatientVitalSigns.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
