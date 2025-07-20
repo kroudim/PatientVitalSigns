@@ -4,7 +4,7 @@
 ## Requirements
 
 ### Core Functionality
-Create a web application that displays patient vital signs in real-time with the following features:
+A web application that displays patient vital signs in real-time with the following features:
 
 1. **Patient Management**
    - List of patients with basic information (Name, Age, Room Number)
@@ -37,7 +37,7 @@ Create a web application that displays patient vital signs in real-time with the
 - **Razor Views:** Clean, responsive UI using Bootstrap
 - **JavaScript/SignalR Client:** Real-time connection handling
 - **Interactive Elements:** Patient selection, alert management
-- **Charts:** Use Chart.js or any other framework for vital signs visualization
+- **Charts:** Chart.js
 - **Responsive Design:**
 
 #### Testing 
