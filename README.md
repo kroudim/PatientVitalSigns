@@ -1,4 +1,47 @@
-I confirm that my solution follows a clean architecture approach and is structured into the following projects:
+<h2 style="color:brown">A real-time Patient Vital Signs Monitoring Dashboard using ASP.NET Core with Razor Views. </h2>
+**Technology Stack:** ASP.NET Core, Razor Views, SignalR, Entity Framework Core, SQLite
+
+## Requirements
+
+### Core Functionality
+Create a web application that displays patient vital signs in real-time with the following features:
+
+1. **Patient Management**
+   - List of patients with basic information (Name, Age, Room Number)
+   - Ability to select a patient for monitoring
+
+2. **Real-time Vital Signs Dashboard**
+   - Display current vital signs (Heart Rate, Blood Pressure, Oxygen Saturation)
+   - Color-coded status indicators (Normal/Warning/Critical)
+   - Live updates without page refresh
+   - Alert notifications for critical values
+
+3. **Data Visualization**
+   - Simple charts showing vital sign trends over time
+   - Historical data view for the last 24 hours
+
+### Technical Requirements
+
+#### Backend 
+- **Models:** Patient and VitalSigns entities
+- **API Endpoints:** 
+  - GET /patients
+  - GET /patients/{id}/vitals
+  - POST /patients/{id}/vitals (for simulation)
+- **SignalR Hub:** Real-time vital signs broadcasting
+- **EF Core:** SQLite database with proper relationships
+- **Validation:** Input validation and business rules
+- **Data Seeding:** Sample patients and initial vital signs
+
+#### Frontend 
+- **Razor Views:** Clean, responsive UI using Bootstrap
+- **JavaScript/SignalR Client:** Real-time connection handling
+- **Interactive Elements:** Patient selection, alert management
+- **Charts:** Use Chart.js or any other framework for vital signs visualization
+- **Responsive Design:**
+
+#### Testing 
+- **Unit Tests:** Backend services and validation logic
 
 - **PatientVitalSigns.Api** – Hosts API endpoints for patient and vital signs operations, providing clean separation for RESTful interactions.
 - **PatientVitalSigns.Application** – Contains business logic, use cases, and service interfaces, ensuring the core logic is independent of frameworks and UI.
